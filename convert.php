@@ -18,19 +18,21 @@ $pgn = str_replace("\n1. ", "[Moves \"1. ", $pgn);
 $pgn = str_replace("&#xD;", " ", $pgn);
 $pgn = str_replace("\r", " ", $pgn);
 
+$pgn = mb_convert_encoding($pgn, "UTF-8");
+
 /*
-* remove time information from moves, if presented
+* remove all additional information from moves, if presented
 */
-$time_info = true;
-while( $time_info ){
-	$time_start = strpos($pgn, "{["); // find FIRST occurance
-	$time_end = strpos($pgn, "]}");
+$info = true;
+while( $info ){
+	$time_start = strpos($pgn, "{"); // find FIRST occurance
+	$time_end = strpos($pgn, "}");
 	
 	if( $time_start != false ){
-		$time_info = substr($pgn, $time_start, $time_end-$time_start+3);
+		$info = substr($pgn, $time_start, $time_end-$time_start+3);
 		$pgn = str_replace($time_info, "", $pgn);
 	}else{
-		$time_info = false;
+		$info = false;
 	}
 }
 
